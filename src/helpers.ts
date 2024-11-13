@@ -2,6 +2,7 @@ import zlib from 'zlib'
 import { parseString } from 'xml2js'
 import { COMPRESSION, ENCODING, FLIPPED, NODE_TYPE, SHAPE } from './constants'
 import { TMXObject, TMXLayer, TMXFlips, TMXTile, TMXTileset, TMXLayerGroup } from './types'
+import { Buffer } from 'buffer'
 
 const isValidArray = (arr: any): boolean => !!(arr && arr.length > 0)
 
@@ -35,12 +36,14 @@ const getProperties = (properties: Record<string, any> | null): { properties: Re
             Object.assign(
                 {},
                 ...properties.map(({ property }: Record<string, any>) =>
+                    property &&
                     Object.assign(
                         {},
                         ...property.map(({ $: { name, value }, _ }: Record<string, any>) => ({
                             [name]: value || _
                         }))
                     )
+                    || null
                 )
             )) ||
         null

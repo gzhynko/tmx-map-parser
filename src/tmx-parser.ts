@@ -34,12 +34,14 @@ export async function TMXParser(xmlString: string, translateFlips: boolean): Pro
         $$.map(async (node: Record<string, any>, i: number) => {
             switch (node['#name']) {
                 case NODE_TYPE.PROPERTIES:
+                    if (!node.$$) return;
                     data.properties = Object.assign(
                         {},
                         ...node.$$.map(({ $: { name, value } }: Record<string, any>) => ({ [name]: value }))
                     )
                     break
                 case NODE_TYPE.EDITOR_SETTINGS:
+                    if (!node.$$) return;
                     data.editorsettings = Object.assign({}, ...node.$$.map((s: any) => ({ [s['#name']]: s.$ })))
                     break
                 case NODE_TYPE.TILESET:
